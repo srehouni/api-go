@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	gopher "github.com/srehouni/api-go/pkg"
 )
 
 type api struct {
-	router http.Handler
+	router     http.Handler
+	repository gopher.GopherRepository
 }
 
 type Server interface {
