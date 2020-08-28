@@ -19,6 +19,7 @@ func New() Server {
 
 	r := mux.NewRouter()
 
+	r.HandleFunc("/", a.fetchGophers).Methods(http.MethodGet)
 	r.HandleFunc("/gophers", a.fetchGophers).Methods(http.MethodGet)
 	r.HandleFunc("/gophers/{ID:[a-zA-Z0-9_]+}", a.fetchGopher).Methods(http.MethodGet)
 
