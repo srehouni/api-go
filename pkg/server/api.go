@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -31,6 +32,24 @@ func (a *api) Router() http.Handler {
 	return a.router
 }
 
-func (a *api) fetchGophers(w http.ResponseWriter, r *http.Request) {}
+func (a *api) fetchGophers(w http.ResponseWriter, r *http.Request) {
 
-func (a *api) fetchGopher(w http.ResponseWriter, r *http.Request) {}
+	gophers, _ := a.repository.FetchGophers()
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(gophers)
+}
+
+func (a *api) fetchGopher(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	gopher, err := a.repository.FetchGopherByID(vars["ID"])
+	w.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("Gopher Not found")
+		return
+	}
+
+	json.NewEncoder(w).Encode(gopher)
+}
